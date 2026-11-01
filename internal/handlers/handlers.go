@@ -11,12 +11,11 @@ import (
 )
 
 func MainHandle(w http.ResponseWriter, r *http.Request) {
-	pathHtml, err := filepath.Abs(filepath.Join("..", "index.html"))
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	filePath := "index.html"
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		filePath = filepath.Join("..", "index.html")
 	}
-	file, err := os.ReadFile(pathHtml)
+	file, err := os.ReadFile(filePath)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
